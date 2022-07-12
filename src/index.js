@@ -1,7 +1,8 @@
 import "./styles.css"
 import { initializeApp } from "firebase/app"
 import {
-    getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc, snap, query, where
+    getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc,
+    query, where, orderBy, serverTimestamp, getDoc,
 } from "firebase/firestore"
 
 const firebaseConfig = {
@@ -25,7 +26,7 @@ const colRef = collection(db, "books")
 
 // queries
 
-const q = query(colRef, where("author", "==", "marvin"))
+const q = query(colRef, orderBy("createdAt"))
 
 //get collection data
 
@@ -51,6 +52,7 @@ addBookForm.addEventListener("submit", (e) => {
     addDoc(colRef, {
         title: addBookForm.title.value,
         author: addBookForm.author.value,
+        createdAt: serverTimestamp()
     })
         .then(() => {
             addBookForm.reset();
@@ -72,3 +74,10 @@ deleteBookForm.addEventListener("submit", (e) => {
         })
 })
 
+
+//get a single document 
+
+// const docRef = doc(db, "books", "iIt2DHvr3LTsuDco3YJ6")
+
+// getDoc(docRef)
+//     .then((doc) => console.log(doc.data(), doc.id))
